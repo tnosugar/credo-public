@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Credo Legal — Redesign Prototype — Nav Dropdowns
+   Credo Legal | Redesign Prototype | Nav Dropdowns
    --------------------------------------------------------------------------
    Generic dropdown handling for any element with class="services-dropdown".
    Each must contain a .services-toggle button. Click to toggle, click outside

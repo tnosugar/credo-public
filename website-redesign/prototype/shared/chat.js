@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Credo Legal — Redesign Prototype — Chat Widget
+   Credo Legal | Redesign Prototype | Chat Widget
    --------------------------------------------------------------------------
    Self-contained chat drawer + bubble. On DOMContentLoaded, injects its own
    markup at the end of <body>, then wires conversation logic. Any element
@@ -10,7 +10,7 @@
   'use strict';
 
   // ---------------------------------------------------------------------------
-  // Drawer markup — injected on load so per-page HTML doesn't duplicate it.
+  // Drawer markup, injected on load so per-page HTML doesn't duplicate it.
   // ---------------------------------------------------------------------------
   const DRAWER_HTML = `
     <button class="chat-bubble" id="chat-bubble" aria-label="Open chat">
@@ -49,14 +49,14 @@
   `;
 
   // ---------------------------------------------------------------------------
-  // Conversation script — same fields as the existing form, conversational.
+  // Conversation script. Same fields as the existing form, conversational.
   // Pages can pre-populate state.answers.q2_debt_type via window.CREDO_CHAT_PRESET
   // so a service-page visitor lands in the chat with their debt type pre-filled.
   // ---------------------------------------------------------------------------
   const conversation = [
     {
       id: 'q1_situation',
-      bot: "Hi — what's bringing you to Credo today?",
+      bot: "Hi. What's bringing you to Credo today?",
       placeholder: "A sentence is fine. We'll take it from there.",
       input: 'free-text'
     },
@@ -86,11 +86,11 @@
       bot: (state) => `Nice to meet you, ${state.q3_first_name || 'there'}. What's the best email to reach you at?`,
       placeholder: 'name@example.com',
       input: 'free-text',
-      validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) || "That doesn't quite look like an email — mind giving it another go?"
+      validate: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) || "That doesn't quite look like an email. Mind giving it another go?"
     },
     {
       id: 'q5_phone',
-      bot: "If you'd like an attorney to call, drop a phone number. Otherwise leave it blank — email works too.",
+      bot: "If you'd like an attorney to call, drop a phone number. Otherwise leave it blank. Email works too.",
       placeholder: '(optional)',
       input: 'free-text',
       optional: true
@@ -258,7 +258,7 @@
       // If preset includes q2_debt_type but not q1_situation, acknowledge briefly first.
       if (state.stepIndex > 0 && state.answers.q2_debt_type && !state.answers.q1_situation) {
         const dtLabel = state.answers.q2_debt_type;
-        appendMsg(`Hi — I see you're here about ${dtLabel.toLowerCase()}. I'll get a few quick details so an attorney can be in touch.`, 'bot');
+        appendMsg(`Hi. I see you're here about ${dtLabel.toLowerCase()}. I'll get a few quick details so an attorney can be in touch.`, 'bot');
         setTimeout(askStep, 800);
       } else {
         askStep();
@@ -383,18 +383,18 @@
             removeTyping();
             const step = conversation[state.stepIndex];
             if (!step) {
-              appendMsg("Hi! I'm jumping in for a moment — looks like we have what we need. Anything else you'd like to share before an attorney calls?", 'bot');
+              appendMsg("Hi! I'm jumping in for a moment. Looks like we have what we need. Anything else you'd like to share before an attorney calls?", 'bot');
               state.awaitingInput = 'free-text';
               setSendEnabled();
               return;
             }
             const situation = state.answers.q1_situation;
             const debtType = state.answers.q2_debt_type;
-            let opener = "Hi! Sorry to interrupt — I saw your conversation come through and wanted to pick it up myself.";
+            let opener = "Hi! Sorry to interrupt. I saw your conversation come through and wanted to pick it up myself.";
             if (situation) {
-              opener = `Hi! Sorry to interrupt — I saw what you wrote about your situation and wanted to take it from here directly.`;
+              opener = `Hi! Sorry to interrupt. I saw what you wrote about your situation and wanted to take it from here directly.`;
             } else if (debtType) {
-              opener = `Hi! Sorry to interrupt — saw you mentioned ${debtType.toLowerCase()}. Wanted to pick this up myself.`;
+              opener = `Hi! Sorry to interrupt. Saw you mentioned ${debtType.toLowerCase()}, and wanted to pick this up myself.`;
             }
             appendMsg(opener, 'bot');
 
@@ -424,7 +424,7 @@
         q2_debt_type: "Which one of these matches your situation best?",
         q3_first_name: "Mind sharing your first name?",
         q4_email: "And the best email I can reach you at?",
-        q5_phone: "If you'd like a call instead, leave a number — totally optional.",
+        q5_phone: "If you'd like a call instead, leave a number. Totally optional.",
         q6_timing: "When works for you to talk to an attorney?"
       };
       return map[stepId] || "Could you tell me a bit more?";
