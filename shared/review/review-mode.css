@@ -24,17 +24,19 @@
 [data-review-mode="on"] .review-banner button{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:6px;padding:6px 12px;font:inherit;cursor:pointer}
 [data-review-mode="on"] .review-banner button:hover{background:rgba(255,255,255,.12)}
 
-/* sidebar — docked on the LEFT; the page is pushed right to fit (see below) */
-[data-review-mode="on"] .review-sidebar{position:fixed;top:46px;left:0;bottom:0;width:330px;z-index:9998;background:var(--rw-surf);border-right:1px solid #d9dbe0;box-shadow:2px 0 12px rgba(0,0,0,.08);display:flex;flex-direction:column;transition:transform .2s}
-[data-review-mode="on"] .review-sidebar.rw-collapsed{transform:translateX(-330px)}
+/* sidebar — docked on the RIGHT; the page is pushed left to fit (see below) */
+[data-review-mode="on"] .review-sidebar{position:fixed;top:46px;right:0;bottom:0;width:330px;z-index:9998;background:var(--rw-surf);border-left:1px solid #d9dbe0;box-shadow:-2px 0 12px rgba(0,0,0,.08);display:flex;flex-direction:column;transition:transform .2s}
+[data-review-mode="on"] .review-sidebar.rw-collapsed{transform:translateX(330px)}
 
-/* Push the whole website right so the sidebar never overlaps it (desktop).
+/* Push the whole website left so the right sidebar never overlaps it (desktop).
  * body margin shifts all normal-flow + sticky content; the widget's own
- * banner/sidebar/pill are position:fixed so they are unaffected. The fixed
- * chat bubble stays bottom-right, clear of the left sidebar. */
+ * banner/sidebar/pill are position:fixed so they're unaffected. Fixed chat
+ * elements are nudged left of the sidebar so they stay clear. */
 @media (min-width:901px){
-  [data-review-mode="on"] body{margin-left:330px;transition:margin-left .2s}
-  [data-review-mode="on"] .nav{top:46px}          /* sticky nav clears the banner */
+  [data-review-mode="on"] body{margin-right:330px;transition:margin-right .2s}
+  [data-review-mode="on"] .nav{top:46px}              /* sticky nav clears the banner */
+  [data-review-mode="on"] .chat-bubble{right:354px}   /* clear the right sidebar */
+  [data-review-mode="on"] .chat-drawer{right:330px}   /* if opened during review */
 }
 [data-review-mode="on"] .review-sidebar h3{margin:0;padding:14px 16px;font:700 14px/1 -apple-system,sans-serif;border-bottom:1px solid #eceef0;display:flex;justify-content:space-between;align-items:center}
 [data-review-mode="on"] .review-sidebar h3 .rw-count{color:var(--rw-deep)}
