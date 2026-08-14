@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Template | Resources | Credo Legal</title>
+  <meta name="description" id="meta-desc" content="">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ['Hanken Grotesk:300,400,500,600,700&display=swap'] } });</script>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <link rel="stylesheet" href="../shared/resources.css">
+  <style>
+    .tpl-letter { border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-soft); padding: 20px 22px; margin: 0 0 12px; }
+    .tpl-letter-body { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.5px; line-height: 1.7; color: var(--text); white-space: pre-wrap; }
+    .tpl-letter-body .ph-token { color: var(--credo-red); }
+    .tpl-copy { margin-top: 12px; font-size: 13px; padding: 7px 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg); color: var(--text); cursor: pointer; }
+    .tpl-copy:hover { border-color: var(--credo-red); color: var(--credo-red); }
+    .tpl-sources { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .tpl-sources a { font-size: 13px; color: var(--text-muted); }
+    .tpl-sources a:hover { color: var(--credo-red); }
+    .res-article h2.blk { font-size: 20px; margin: 36px 0 12px; letter-spacing: -0.01em; }
+  </style>
+</head>
+<body data-res-depth="2" data-res-section="templates">
+
+<div class="service-breadcrumb">
+  <div class="container breadcrumb-row">
+    <a href="../../index.html">Home</a><span class="breadcrumb-sep">/</span>
+    <a href="../index.html">Resources</a><span class="breadcrumb-sep">/</span>
+    <a href="index.html">Templates</a><span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current" id="crumb">Template</span>
+  </div>
+</div>
+
+<div class="res-article-wrap">
+  <div class="gate-banner" id="gate">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+    <div class="gate-banner-text"><strong>Review draft: attorney approval pending.</strong> General information grounded in CFPB guidance, not legal advice for your situation. Anything in <span style="font-family:ui-monospace,Menlo,monospace">[brackets]</span> is a placeholder to confirm before you use it.</div>
+  </div>
+  <article class="res-article">
+    <p class="res-article-kicker" id="kicker"></p>
+    <h1 id="title"></h1>
+    <div class="res-article-tags" id="tags"></div>
+    <div class="res-article-body" id="body"></div>
+  </article>
+  <div class="interlinks" id="interlinks"></div>
+</div>
+
+<section class="cta-banner" style="padding:64px 0;">
+  <div class="container">
+    <h2>Not sure how to handle your collector?</h2>
+    <p>A free consultation with our attorneys tells you what to say, and what to send, for your specific situation.</p>
+    <div class="cta-banner-actions">
+      <a class="btn-primary" href="tel:+12124614026">Talk to an attorney
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="cta-banner-meta">Or call <a href="tel:+12124614026">(212) 461-4026</a> · Mon–Fri, 9–5 ET</div>
+  </div>
+</section>
+
+<script src="templates-data.js"></script>
+<script>
+(function () {
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var hlPh = function (s) { return esc(s).replace(/\[([^\]]+)\]/g, '<span class="ph-token">[$1]</span>'); };
+  var slug = new URLSearchParams(location.search).get('slug');
+  var t = (window.CREDO_TEMPLATES || []).filter(function (x) { return x.slug === slug; })[0];
+  if (!t) { document.getElementById('title').textContent = 'Template not found';
+    document.getElementById('body').innerHTML = '<p>We couldn’t find that template. <a href="index.html">Back to templates</a>.</p>';
+    document.getElementById('gate').style.display = 'none'; return; }
+
+  document.title = t.title + ' | Templates | Credo Legal';
+  document.getElementById('crumb').textContent = t.title;
+  document.getElementById('kicker').textContent = t.stage_label || 'Any stage';
+  document.getElementById('title').textContent = t.title;
+  var md = document.getElementById('meta-desc'); if (md) md.content = t.situation || '';
+  var tags = [];
+  (t.laws || []).forEach(function (l) { tags.push(l.label); });
+  document.getElementById('tags').innerHTML = tags.map(function (x) { return '<span class="res-article-tag">' + esc(x) + '</span>'; }).join('');
+
+  var h = '';
+  if (t.whenToUse) h += '<p><strong>When to use.</strong> ' + esc(t.whenToUse) + '</p>';
+  if (t.say && t.say.length) {
+    h += '<h2 class="blk">What to say</h2><div class="say-block is-say"><div class="say-block-label">Say this</div>' +
+      t.say.map(function (p) { return '<p>' + hlPh(p) + '</p>'; }).join('') + '</div>';
+  }
+  if (t.dontSay && t.dontSay.length) {
+    h += '<h2 class="blk">What not to say</h2><div class="say-block is-dont"><div class="say-block-label">Avoid</div>' +
+      t.dontSay.map(function (p) { return '<p>' + hlPh(p) + '</p>'; }).join('') + '</div>';
+  }
+  if (t.letter && t.letter.body) {
+    h += '<h2 class="blk">' + esc(t.letter.title || 'Letter you can adapt') + '</h2>' +
+      '<div class="tpl-letter"><div class="tpl-letter-body" id="letter">' + hlPh(t.letter.body) + '</div></div>' +
+      '<button class="tpl-copy" id="copy">Copy letter text</button>';
+  }
+  if (t.sources && t.sources.length) {
+    h += '<h2 class="blk">Sources</h2><div class="tpl-sources">' +
+      t.sources.map(function (s) { return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.label) + ' ↗</a>'; }).join('') + '</div>';
+  }
+  document.getElementById('body').innerHTML = h;
+
+  var copy = document.getElementById('copy');
+  if (copy) copy.onclick = function () {
+    var txt = t.letter.body;
+    navigator.clipboard && navigator.clipboard.writeText(txt);
+    copy.textContent = 'Copied'; setTimeout(function () { copy.textContent = 'Copy letter text'; }, 1600);
+  };
+
+  function col(title, items, render) {
+    var inner = items && items.length ? '<ul>' + items.map(render).join('') + '</ul>' : '<div class="empty">None</div>';
+    return '<div class="interlinks-col"><h4>' + title + '</h4>' + inner + '</div>';
+  }
+  document.getElementById('interlinks').innerHTML =
+    col('Laws behind this', t.laws, function (l) { return '<li><a href="' + l.url + '">' + esc(l.label) + '</a></li>'; }) +
+    col('More templates', (window.CREDO_TEMPLATES || []).filter(function (x) { return x.slug !== t.slug && x.stage === t.stage; }).slice(0, 4),
+      function (x) { return '<li><a href="article.html?slug=' + encodeURIComponent(x.slug) + '">' + esc(x.title) + '</a></li>'; }) +
+    col('Read next', [{ title: 'Browse all guides', url: '../blog/index.html' }, { title: 'The laws we rely on', url: '../laws/index.html' }],
+      function (x) { return '<li><a href="' + x.url + '">' + esc(x.title) + '</a></li>'; });
+})();
+</script>
+<script src="../shared/chrome.js" defer></script>
+</body>
+</html>

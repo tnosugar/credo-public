@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templates | Resources | Credo Legal</title>
+  <meta name="description" content="Word-for-word scripts and letters for talking to debt collectors, grounded in CFPB guidance: what to say, what not to say, at each point in the process.">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ['Hanken Grotesk:300,400,500,600,700&display=swap'] } });</script>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <link rel="stylesheet" href="../shared/resources.css">
+</head>
+<body data-res-depth="2" data-res-section="templates">
+
+<div class="service-breadcrumb">
+  <div class="container breadcrumb-row">
+    <a href="../../index.html">Home</a><span class="breadcrumb-sep">/</span>
+    <a href="../index.html">Resources</a><span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Templates</span>
+  </div>
+</div>
+
+<section class="res-hero">
+  <div class="container res-hero-inner">
+    <div class="section-eyebrow">Templates</div>
+    <h1>Know what to say before they call.</h1>
+    <p class="res-hero-lede">Word-for-word scripts and letters for each moment in the process, grounded in CFPB guidance. What to say, what not to say, and a letter you can adapt.</p>
+  </div>
+</section>
+
+<section style="padding-top: 8px;">
+  <div class="container">
+    <div class="gate-banner" style="max-width:none;margin-bottom:28px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+      <div class="gate-banner-text"><strong>Review drafts.</strong> These scripts are grounded in CFPB guidance and are pending attorney review. They are general information, not legal advice for your specific situation. Anything in <span style="font-family:ui-monospace,Menlo,monospace">[brackets]</span> is a placeholder to confirm.</div>
+    </div>
+
+    <div class="res-toolbar">
+      <input type="search" class="res-search" id="q" placeholder="Search templates…" aria-label="Search templates">
+      <div class="res-filter-row" id="stage-filters"><span class="res-filter-label">Stage</span></div>
+      <div class="res-filter-row" id="type-filters"><span class="res-filter-label">Type</span></div>
+      <div class="res-count-line" id="count"></div>
+    </div>
+    <div class="card-grid" id="grid"></div>
+    <div class="res-empty" id="empty" hidden>No templates match those filters. <button class="res-chip" id="reset">Clear filters</button></div>
+  </div>
+</section>
+
+<script src="templates-data.js"></script>
+<script>
+(function () {
+  var DATA = (window.CREDO_TEMPLATES || []).slice().sort(function (a, b) { return (a.stage || 99) - (b.stage || 99); });
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var state = { q: '', stage: null, type: null };
+
+  var stageMap = {}, typeMap = { script: 'Script', letter: 'Letter' };
+  DATA.forEach(function (t) { if (t.stage_label) stageMap[t.stage != null ? t.stage : 99] = t.stage_label; });
+
+  function chips(host, entries, key) {
+    Object.keys(entries).sort(function (a, b) { return a - b; }).forEach(function (k) {
+      var b = document.createElement('button'); b.className = 'res-chip'; b.type = 'button';
+      b.textContent = entries[k]; b.setAttribute('aria-pressed', 'false');
+      b.onclick = function () {
+        var on = state[key] === k; state[key] = on ? null : k;
+        host.querySelectorAll('.res-chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+        if (!on) b.setAttribute('aria-pressed', 'true'); render();
+      };
+      host.appendChild(b);
+    });
+  }
+  chips(document.getElementById('stage-filters'), stageMap, 'stage');
+  chips(document.getElementById('type-filters'), typeMap, 'type');
+
+  function card(t) {
+    var typeLabel = (t.type || []).indexOf('letter') >= 0 ? 'Script + letter' : 'Script';
+    return '<a class="rcard" href="article.html?slug=' + encodeURIComponent(t.slug) + '">' +
+      '<div class="rcard-media"><div class="ph"><div><div class="ph-label">Image placeholder</div></div></div></div>' +
+      '<div class="rcard-body">' +
+        '<span class="rcard-pill">' + esc(t.stage_label || 'Any stage') + '</span>' +
+        '<h3>' + esc(t.title) + '</h3>' +
+        '<p class="rcard-excerpt">' + esc(t.situation || '') + '</p>' +
+        '<div class="rcard-meta">' + esc(typeLabel) + '</div>' +
+      '</div></a>';
+  }
+  function match(t) {
+    if (state.stage && String(t.stage != null ? t.stage : 99) !== state.stage) return false;
+    if (state.type && (t.type || []).indexOf(state.type) < 0) return false;
+    if (state.q) { var h = (t.title + ' ' + t.situation + ' ' + (t.whenToUse || '')).toLowerCase(); if (h.indexOf(state.q) === -1) return false; }
+    return true;
+  }
+  function render() {
+    var items = DATA.filter(match);
+    document.getElementById('grid').innerHTML = items.map(card).join('');
+    document.getElementById('empty').hidden = items.length > 0;
+    document.getElementById('count').textContent = items.length + ' of ' + DATA.length + ' templates';
+  }
+  document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value.trim().toLowerCase(); render(); });
+  document.getElementById('reset').onclick = function () {
+    state = { q: '', stage: null, type: null }; document.getElementById('q').value = '';
+    document.querySelectorAll('.res-chip[aria-pressed]').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); }); render();
+  };
+  render();
+})();
+</script>
+<script src="../shared/chrome.js" defer></script>
+</body>
+</html>

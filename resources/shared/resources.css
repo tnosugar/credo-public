@@ -1,0 +1,169 @@
+/* ==========================================================================
+   Credo Legal - Resources section components
+   Layers on shared/styles.css (same tokens: --credo-red, --text, --bg, etc.).
+   Adds: hub cards, image card grids (blog/templates), filter bar, topic
+   groups, interlink block, attorney-gate banner, static (non-accordion) FAQ,
+   image placeholders, article layout.
+   ========================================================================== */
+
+/* Section hero (lighter than statute-hero, used by hub + section index pages) */
+.res-hero { padding: 56px 0 40px; background: radial-gradient(ellipse at top right, rgba(201,32,40,0.05), transparent 60%), var(--bg); }
+.res-hero-inner { max-width: 760px; }
+.res-hero h1 { font-size: clamp(32px, 4.4vw, 46px); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 18px; }
+.res-hero .section-eyebrow { margin-bottom: 12px; }
+.res-hero-lede { font-size: 19px; line-height: 1.6; color: var(--text-muted); max-width: 680px; }
+
+/* ── Resources hub: four large cards ─────────────────────────────────────── */
+.res-hub-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.res-hub-card {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 32px; border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--bg); color: var(--text);
+  transition: border-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+}
+.res-hub-card:hover { border-color: var(--credo-red); transform: translateY(-2px); box-shadow: var(--shadow-md); color: var(--text); }
+.res-hub-card-icon { width: 42px; height: 42px; border-radius: 10px; background: var(--bg-sand); color: var(--credo-red); display: grid; place-items: center; }
+.res-hub-card-icon svg { width: 22px; height: 22px; }
+.res-hub-card h3 { font-size: 21px; display: flex; align-items: center; gap: 10px; }
+.res-hub-card .res-count { font-size: 12px; font-weight: 600; color: var(--credo-red); background: var(--bg-sand); border-radius: 999px; padding: 2px 10px; letter-spacing: 0.02em; }
+.res-hub-card p { font-size: 15px; color: var(--text-muted); line-height: 1.6; flex: 1; }
+.res-hub-card .res-hub-link { font-size: 14px; color: var(--credo-red); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+.res-hub-card .res-hub-link svg { width: 14px; height: 14px; transition: transform var(--t-fast); }
+.res-hub-card:hover .res-hub-link svg { transform: translateX(3px); }
+@media (max-width: 720px) { .res-hub-grid { grid-template-columns: 1fr; } }
+
+/* ── Image card grid (Blog = 4 per row; Templates reuse) ─────────────────── */
+.card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.card-grid.is-3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 1040px) { .card-grid, .card-grid.is-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .card-grid, .card-grid.is-3 { grid-template-columns: 1fr; } }
+
+.rcard {
+  display: flex; flex-direction: column;
+  border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+  background: var(--bg); color: var(--text);
+  transition: border-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+}
+.rcard:hover { border-color: var(--credo-red); transform: translateY(-2px); box-shadow: var(--shadow-md); color: var(--text); }
+.rcard-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+.rcard-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rcard-body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.rcard-pill { align-self: flex-start; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--credo-red); background: var(--bg-sand); border-radius: 4px; padding: 3px 9px; }
+.rcard h3 { font-size: 16px; line-height: 1.35; letter-spacing: -0.01em; }
+.rcard-excerpt { font-size: 13.5px; color: var(--text-muted); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.rcard-meta { margin-top: auto; padding-top: 10px; font-size: 11px; color: var(--text-soft); letter-spacing: 0.02em; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.rcard-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-soft); }
+
+/* ── Image placeholder (Higgsfield later) ────────────────────────────────── */
+.ph {
+  width: 100%; height: 100%;
+  background:
+    repeating-linear-gradient(-45deg, rgba(201,32,40,0.05) 0 10px, transparent 10px 20px),
+    var(--bg-sand);
+  display: grid; place-items: center; text-align: center; padding: 14px;
+}
+.ph-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-soft); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.ph-prompt { font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-top: 6px; max-width: 240px; }
+
+/* ── Filter bar (search + chips) ─────────────────────────────────────────── */
+.res-toolbar { display: flex; flex-direction: column; gap: 16px; margin-bottom: 36px; }
+.res-search {
+  width: 100%; max-width: 420px; padding: 11px 16px; font: inherit; font-size: 15px;
+  border: 1px solid var(--border); border-radius: 999px; background: var(--bg-soft); color: var(--text);
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.res-search:focus { outline: none; border-color: var(--credo-red); background: var(--bg); }
+.res-filter-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.res-filter-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-soft); margin-right: 4px; }
+.res-chip {
+  font: inherit; font-size: 13px; padding: 6px 13px; border: 1px solid var(--border);
+  border-radius: 999px; background: var(--bg); color: var(--text-muted); cursor: pointer;
+  transition: all var(--t-fast);
+}
+.res-chip:hover { border-color: var(--credo-red); color: var(--credo-red); }
+.res-chip[aria-pressed="true"] { background: var(--text); color: #fff; border-color: var(--text); }
+.res-count-line { font-size: 13px; color: var(--text-soft); }
+
+/* ── Topic groups (blog) ─────────────────────────────────────────────────── */
+.topic-group { margin-bottom: 56px; }
+.topic-group-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.topic-group-head h2 { font-size: 22px; letter-spacing: -0.01em; }
+.topic-group-head .topic-count { font-size: 13px; color: var(--text-soft); }
+.topic-group[hidden] { display: none; }
+
+/* ── Article layout (blog + template article) ────────────────────────────── */
+.res-article-wrap { padding: 48px 0 72px; }
+.res-article { max-width: 720px; margin: 0 auto; }
+.res-article-kicker { font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--credo-red); font-weight: 600; margin-bottom: 14px; }
+.res-article h1 { font-size: clamp(30px, 4vw, 42px); line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 16px; }
+.res-article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.res-article-tag { font-size: 12px; color: var(--text-muted); background: var(--bg-sand); border-radius: 999px; padding: 4px 11px; }
+.res-article-body { font-size: 17px; line-height: 1.75; color: var(--text); }
+.res-article-body h2 { font-size: 26px; margin: 40px 0 14px; letter-spacing: -0.01em; }
+.res-article-body h3 { font-size: 20px; margin: 30px 0 10px; }
+.res-article-body p { margin-bottom: 18px; color: #2a2f37; }
+.res-article-body ul, .res-article-body ol { margin: 0 0 18px; padding-left: 22px; }
+.res-article-body li { margin-bottom: 8px; }
+.res-article-body a { color: var(--credo-red); text-decoration: underline; text-underline-offset: 2px; text-decoration-color: rgba(201,32,40,0.3); }
+.res-article-body a:hover { text-decoration-color: var(--credo-red); }
+.res-article-body blockquote { margin: 0 0 18px; padding: 4px 0 4px 20px; border-left: 3px solid var(--credo-red); color: var(--text-muted); }
+.res-article-body strong { color: var(--text); font-weight: 600; }
+.res-article-body table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 0 0 18px; }
+.res-article-body th, .res-article-body td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.res-article-body th { background: var(--bg-soft); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+.res-article-body hr { border: 0; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* ── Interlink block (Related articles / laws / templates) ───────────────── */
+.interlinks { max-width: 720px; margin: 48px auto 0; padding-top: 32px; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.interlinks-col h4 { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 12px; }
+.interlinks-col ul { display: flex; flex-direction: column; gap: 9px; }
+.interlinks-col a { font-size: 14px; line-height: 1.4; color: var(--text); display: inline-flex; gap: 6px; align-items: baseline; }
+.interlinks-col a:hover { color: var(--credo-red); }
+.interlinks-col a .lnk-cite { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--credo-red); }
+.interlinks-col .empty { font-size: 13px; color: var(--text-soft); }
+@media (max-width: 700px) { .interlinks { grid-template-columns: 1fr; gap: 24px; } }
+
+/* ── Attorney-gate / review banner (templates) ───────────────────────────── */
+.gate-banner {
+  max-width: 720px; margin: 0 auto 28px; padding: 16px 20px;
+  background: var(--bg-warn); border: 1px solid var(--border-warn); border-radius: var(--radius);
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.gate-banner svg { width: 20px; height: 20px; color: var(--text-warn); flex-shrink: 0; margin-top: 2px; }
+.gate-banner-text { font-size: 13.5px; color: var(--text-warn); line-height: 1.55; }
+.gate-banner-text strong { font-weight: 700; }
+
+/* Script blocks (templates): say / don't-say */
+.say-block { border-radius: var(--radius); padding: 18px 20px; margin: 0 0 16px; border: 1px solid var(--border); background: var(--bg-soft); }
+.say-block.is-say { border-left: 3px solid #15803d; }
+.say-block.is-dont { border-left: 3px solid var(--credo-red); }
+.say-block-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+.say-block.is-say .say-block-label { color: #15803d; }
+.say-block.is-dont .say-block-label { color: var(--credo-red); }
+.say-block p { margin: 0 0 8px; }
+.say-block p:last-child { margin-bottom: 0; }
+
+/* ── Static FAQ (no accordion; all visible) ──────────────────────────────── */
+.faq-cat { margin-bottom: 48px; }
+.faq-cat-head { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--credo-red); font-weight: 600; margin-bottom: 8px; }
+.faq-static { max-width: 820px; }
+.faq-static-item { padding: 26px 0; border-bottom: 1px solid var(--border); }
+.faq-static-item:first-child { border-top: 1px solid var(--border); }
+.faq-static-q { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 10px; letter-spacing: -0.01em; }
+.faq-static-a { font-size: 15.5px; color: var(--text-muted); line-height: 1.65; }
+.faq-static-a a { color: var(--credo-red); }
+.faq-static-src { display: inline-block; margin-top: 8px; font-size: 11px; color: var(--text-soft); letter-spacing: 0.02em; }
+
+/* ── Laws grid card meta ─────────────────────────────────────────────────── */
+.law-card-abbr { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--credo-red); letter-spacing: 0.02em; }
+.law-sections { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.law-sections .sec { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; color: var(--text-muted); background: var(--bg-soft); border: 1px solid var(--border-soft); border-radius: 4px; padding: 1px 6px; }
+
+/* A "cited by" list on law pages */
+.cited-by { display: flex; flex-direction: column; gap: 8px; }
+.cited-by a { font-size: 15px; color: var(--text); }
+.cited-by a:hover { color: var(--credo-red); }
+
+/* Empty-state for filtered grids */
+.res-empty { padding: 48px 0; text-align: center; color: var(--text-soft); font-size: 15px; }
+.res-empty[hidden] { display: none; }

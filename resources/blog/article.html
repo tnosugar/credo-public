@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Article | Resources | Credo Legal</title>
+  <meta name="description" id="meta-desc" content="">
+  <!-- og:image is injected from the article's feature_image on load (feature image lives in
+       metadata only; it is intentionally not rendered in the article body). -->
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ['Hanken Grotesk:300,400,500,600,700&display=swap'] } });</script>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <link rel="stylesheet" href="../shared/resources.css">
+</head>
+<body data-res-depth="2" data-res-section="blog">
+
+<div class="service-breadcrumb">
+  <div class="container breadcrumb-row">
+    <a href="../../index.html">Home</a><span class="breadcrumb-sep">/</span>
+    <a href="../index.html">Resources</a><span class="breadcrumb-sep">/</span>
+    <a href="index.html">Blog</a><span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current" id="crumb">Article</span>
+  </div>
+</div>
+
+<div class="res-article-wrap">
+  <article class="res-article" id="article">
+    <p class="res-article-kicker" id="kicker"></p>
+    <h1 id="title"></h1>
+    <div class="res-article-tags" id="tags"></div>
+    <div class="res-article-body" id="body"></div>
+  </article>
+  <div class="interlinks" id="interlinks"></div>
+</div>
+
+<section class="cta-banner" style="padding:64px 0;">
+  <div class="container">
+    <h2>Not sure how this applies to your debt?</h2>
+    <p>A free consultation with our attorneys tells you where you stand, at no cost and no obligation.</p>
+    <div class="cta-banner-actions">
+      <a class="btn-primary" href="tel:+12124614026">Talk to an attorney
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="cta-banner-meta">Or call <a href="tel:+12124614026">(212) 461-4026</a> · Mon–Fri, 9–5 ET</div>
+  </div>
+</section>
+
+<script src="blog-content.js"></script>
+<script>
+(function () {
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var slug = new URLSearchParams(location.search).get('slug');
+  var W = window.CREDO_RES_BLOG || {};
+  var a = slug && W[slug];
+  if (!a) {
+    document.getElementById('title').textContent = 'Article not found';
+    document.getElementById('body').innerHTML = '<p>We couldn’t find that article. <a href="index.html">Back to the blog</a>.</p>';
+    return;
+  }
+
+  // Metadata (incl. og:image; feature image stays in metadata, not the body)
+  document.title = a.title + ' | Credo Legal';
+  document.getElementById('crumb').textContent = a.title;
+  var head = document.head, desc = document.getElementById('meta-desc');
+  function metaProp(p, v) { var m = document.createElement('meta'); m.setAttribute('property', p); m.content = v; head.appendChild(m); }
+  metaProp('og:title', a.title);
+  metaProp('og:type', 'article');
+  metaProp('og:image', a.feature_image);
+  metaProp('article:section', a.pillarLabel);
+  var mt = document.createElement('meta'); mt.name = 'twitter:card'; mt.content = 'summary_large_image'; head.appendChild(mt);
+
+  // Header + tags
+  document.getElementById('kicker').textContent = a.pillarLabel;
+  document.getElementById('title').textContent = a.title;
+  var tags = [];
+  if (a.stage_label) tags.push(a.stage_label);
+  (a.debt_types || []).forEach(function (t) { tags.push(t.label); });
+  document.getElementById('tags').innerHTML = tags.map(function (t) { return '<span class="res-article-tag">' + esc(t) + '</span>'; }).join('');
+
+  // Body (no feature image inserted)
+  document.getElementById('body').innerHTML = a.html;
+
+  // Interlinks
+  function col(title, items, render) {
+    var inner = items && items.length ? '<ul>' + items.map(render).join('') + '</ul>' : '<div class="empty">None</div>';
+    return '<div class="interlinks-col"><h4>' + title + '</h4>' + inner + '</div>';
+  }
+  var il =
+    col('Related guides', a.related, function (r) { return '<li><a href="' + r.url + '">' + esc(r.title) + '</a></li>'; }) +
+    col('Laws referenced', a.laws, function (l) { var m = l.label.match(/^(.+?) (§.+)$/); return m ? '<li><a href="' + l.url + '"><span class="lnk-cite">' + esc(m[2]) + '</span> ' + esc(m[1]) + '</a></li>' : '<li><a href="' + l.url + '">' + esc(l.label) + '</a></li>'; }) +
+    col('Templates', a.templates, function (t) { return '<li><a href="' + t.url + '">' + esc(t.label) + '</a></li>'; });
+  document.getElementById('interlinks').innerHTML = il;
+})();
+</script>
+<script src="../shared/chrome.js" defer></script>
+</body>
+</html>

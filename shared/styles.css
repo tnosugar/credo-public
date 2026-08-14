@@ -565,6 +565,46 @@ footer { padding: 56px 0 32px; background: var(--text); color: #c8cdd6; }
 }
 
 /* ==========================================================================
+   Review + info bar (ported from the landing pages)
+   Social-proof row (BBB / Trustpilot / Google) + headline metric row.
+   ========================================================================== */
+.reviewbar-band { padding: 0 0 8px; }
+.reviewbar { border-top: 2px solid var(--text); border-bottom: 2px solid var(--text); background: var(--bg); }
+.reviewbar .rev-row { display: grid; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .reviewbar .rev-row { grid-template-columns: repeat(3, 1fr); } }
+.reviewbar .rev { display: flex; align-items: center; gap: 14px; padding: 18px 22px; border-bottom: 1px solid var(--border); transition: background var(--t-fast); }
+@media (min-width: 720px) { .reviewbar .rev { border-bottom: 0; border-right: 1px solid var(--border); } .reviewbar .rev:last-child { border-right: 0; } }
+.reviewbar .rev:hover { background: var(--bg-soft); }
+.reviewbar .rev .logo { flex: none; }
+.reviewbar .rev .rv-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.2; display: flex; align-items: center; gap: 8px; }
+.reviewbar .rev .rv-meta { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; letter-spacing: 0.04em; color: var(--text-muted); margin-top: 4px; text-transform: uppercase; }
+.reviewbar .stars { display: inline-flex; gap: 1px; }
+.reviewbar .metric-row { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); background: var(--bg-soft); }
+.reviewbar .metric-row .m { padding: 20px 22px; text-align: center; }
+.reviewbar .metric-row .m + .m { border-left: 1px solid var(--border); }
+.reviewbar .metric-row .m-n { display: block; font-size: 32px; font-weight: 300; letter-spacing: -0.03em; color: var(--credo-red); line-height: 1; }
+.reviewbar .metric-row .m-l { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); margin-top: 9px; }
+
+/* ==========================================================================
+   Section CTA (mid-page nudge) + Bottom CTA (landing-page design)
+   ========================================================================== */
+.section-cta { text-align: center; margin-top: 40px; }
+.section-cta .cta-alt { margin-top: 14px; font-size: 13px; color: var(--text-muted); }
+.section-cta .cta-alt a { color: var(--text); font-weight: 600; }
+.section-cta .cta-alt a:hover { color: var(--credo-red); }
+
+.bottom-cta { background: var(--text); color: #c8cdd6; padding: 80px 0; position: relative; overflow: hidden; text-align: center; }
+.bottom-cta::before { content: ""; position: absolute; top: -70%; left: 50%; transform: translateX(-50%); width: 90%; height: 200%; background: radial-gradient(ellipse at top, var(--credo-red) 0%, transparent 62%); opacity: 0.16; pointer-events: none; }
+.bottom-cta .container { position: relative; z-index: 1; }
+.bottom-cta .cta-eyebrow { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #ff6b73; font-weight: 600; margin-bottom: 16px; }
+.bottom-cta h2 { color: #fff; font-size: clamp(28px, 3.6vw, 40px); font-weight: 600; letter-spacing: -0.015em; margin: 0 auto 16px; max-width: 680px; }
+.bottom-cta h2 em { color: #ff6b73; font-style: normal; }
+.bottom-cta p { color: #c8cdd6; font-size: 18px; max-width: 560px; margin: 0 auto 28px; line-height: 1.6; }
+.bottom-cta .bphone { margin-top: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #8a93a3; letter-spacing: 0.04em; }
+.bottom-cta .bphone a { color: #fff; border-bottom: 1px solid #2a2f37; padding-bottom: 2px; }
+.bottom-cta .bphone a:hover { border-color: #ff6b73; }
+
+/* ==========================================================================
    Testimonial band (between Your rights and About)
    ========================================================================== */
 .testimonial-band {
@@ -690,6 +730,40 @@ footer { padding: 56px 0 32px; background: var(--text); color: #c8cdd6; }
 /* Other federal laws cross-link grid */
 .statute-other-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 800px; }
 @media (max-width: 700px) { .statute-other-grid { grid-template-columns: 1fr; } }
+
+/* ==========================================================================
+   Statute text reader (verbatim law text, deep-linkable subdivisions)
+   Anchor convention: §1692c(a)(3) → id="s1692c-a-3" (lowercase).
+   ========================================================================== */
+.stx-note { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 8px; }
+.stx-note a { color: var(--credo-red); }
+.stx-toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+.stx-toc a { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--text); background: var(--bg-soft); border: 1px solid var(--border); border-radius: 6px; padding: 4px 9px; transition: all var(--t-fast); }
+.stx-toc a:hover { border-color: var(--credo-red); color: var(--credo-red); }
+
+.stx { display: flex; flex-direction: column; gap: 8px; }
+.stx-sec { padding: 28px 0; border-top: 1px solid var(--border); scroll-margin-top: 90px; }
+.stx-sec:first-child { border-top: 0; }
+.stx-h { font-size: 20px; line-height: 1.35; letter-spacing: -0.01em; margin-bottom: 6px; display: flex; gap: 10px; align-items: baseline; }
+.stx-h .stx-cite { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; color: var(--credo-red); font-weight: 600; }
+.stx-secnote { font-size: 12px; color: var(--text-soft); margin-bottom: 14px; }
+.stx-lead { font-size: 15px; line-height: 1.7; color: var(--text); margin: 10px 0; }
+
+/* nested subdivisions */
+.stx-sub { scroll-margin-top: 90px; margin: 10px 0; }
+.stx-sub > .stx-label { font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 4px; }
+.stx-body, .stx-para, .stx-subpara { font-size: 15px; line-height: 1.7; color: #2a2f37; }
+.stx-para { scroll-margin-top: 90px; padding-left: 22px; text-indent: -22px; margin: 6px 0; }
+.stx-subpara { scroll-margin-top: 90px; padding-left: 44px; text-indent: -22px; margin: 5px 0; }
+.stx-num { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; color: var(--text-muted); }
+.stx-sub, .stx-para, .stx-subpara { position: relative; }
+/* hover permalink for any addressable subdivision */
+.stx-link { color: inherit; text-decoration: none; }
+.stx-link:hover { color: var(--credo-red); }
+.stx-link::after { content: ' #'; font-size: 11px; color: var(--credo-red); opacity: 0; transition: opacity var(--t-fast); }
+.stx-sec:hover .stx-h .stx-link::after, .stx-sub:hover > .stx-label .stx-link::after, .stx-para:hover .stx-link::after, .stx-subpara:hover .stx-link::after { opacity: 0.7; }
+/* highlight a freshly-targeted subdivision */
+:target.stx-sec, :target.stx-sub, :target.stx-para, :target.stx-subpara { background: var(--bg-warn); border-radius: var(--radius-sm); box-shadow: 0 0 0 6px var(--bg-warn); }
 
 /* Inline CTA mid-page */
 .statute-inline-cta {

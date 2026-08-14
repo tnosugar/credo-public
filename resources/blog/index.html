@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Resources | Credo Legal</title>
+  <meta name="description" content="Plain-English guides on debt invalidation, your FDCPA rights, being sued, credit reporting, and rebuilding after. Filter by debt type and where you are in the process.">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+  <script>WebFont.load({ google: { families: ['Hanken Grotesk:300,400,500,600,700&display=swap'] } });</script>
+  <link rel="stylesheet" href="../../shared/styles.css">
+  <link rel="stylesheet" href="../shared/resources.css">
+</head>
+<body data-res-depth="2" data-res-section="blog">
+
+<div class="service-breadcrumb">
+  <div class="container breadcrumb-row">
+    <a href="../../index.html">Home</a><span class="breadcrumb-sep">/</span>
+    <a href="../index.html">Resources</a><span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Blog</span>
+  </div>
+</div>
+
+<section class="res-hero">
+  <div class="container res-hero-inner">
+    <div class="section-eyebrow">Blog</div>
+    <h1>Guides to understanding, and fighting, a debt.</h1>
+    <p class="res-hero-lede">Plain-English explainers on how collection works, your rights, and what to do next. Filter by the kind of debt you have and where you are in the process.</p>
+  </div>
+</section>
+
+<section style="padding-top: 8px;">
+  <div class="container">
+    <div class="res-toolbar">
+      <input type="search" class="res-search" id="q" placeholder="Search guides…" aria-label="Search guides">
+      <div class="res-filter-row" id="type-filters"><span class="res-filter-label">Debt type</span></div>
+      <div class="res-filter-row" id="stage-filters"><span class="res-filter-label">Stage</span></div>
+      <div class="res-count-line" id="count"></div>
+    </div>
+    <div id="groups"></div>
+    <div class="res-empty" id="empty" hidden>No guides match those filters. <button class="res-chip" id="reset">Clear filters</button></div>
+  </div>
+</section>
+
+<script src="blog-index.js"></script>
+<script>
+(function () {
+  var DATA = window.CREDO_RES_BLOG_INDEX || [];
+  var state = { q: '', type: null, stage: null };
+
+  // Build filter chips from the data
+  var typeMap = {}, stageMap = {};
+  DATA.forEach(function (a) {
+    (a.debt_types || []).forEach(function (t) { typeMap[t.key] = t.label; });
+    if (a.stage_label) stageMap[a.stage != null ? a.stage : 99] = a.stage_label;
+  });
+  function chipRow(host, entries, key) {
+    Object.keys(entries).sort().forEach(function (k) {
+      var b = document.createElement('button');
+      b.className = 'res-chip'; b.type = 'button'; b.textContent = entries[k];
+      b.setAttribute('aria-pressed', 'false');
+      b.onclick = function () {
+        var on = state[key] === k;
+        state[key] = on ? null : k;
+        host.querySelectorAll('.res-chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+        if (!on) b.setAttribute('aria-pressed', 'true');
+        render();
+      };
+      host.appendChild(b);
+    });
+  }
+  chipRow(document.getElementById('type-filters'), typeMap, 'type');
+  chipRow(document.getElementById('stage-filters'), stageMap, 'stage');
+
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  function card(a) {
+    var type = (a.debt_types && a.debt_types[0]) ? a.debt_types[0].label : '';
+    var meta = [a.stage_label, type].filter(Boolean);
+    return '<a class="rcard" href="' + a.link + '">' +
+      '<div class="rcard-media">' +
+        '<img src="' + esc(a.feature_image) + '" alt="" loading="lazy" ' +
+          'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\';">' +
+        '<div class="ph" style="display:none"><div><div class="ph-label">Image placeholder</div></div></div>' +
+      '</div>' +
+      '<div class="rcard-body">' +
+        '<span class="rcard-pill">' + esc(a.pillarLabel) + '</span>' +
+        '<h3>' + esc(a.title) + '</h3>' +
+        '<p class="rcard-excerpt">' + esc(a.excerpt) + '</p>' +
+        '<div class="rcard-meta">' + meta.map(esc).join(' <span class="dot"></span> ') + '</div>' +
+      '</div></a>';
+  }
+
+  function match(a) {
+    if (state.type && !(a.debt_types || []).some(function (t) { return t.key === state.type; })) return false;
+    if (state.stage && String(a.stage != null ? a.stage : 99) !== state.stage) return false;
+    if (state.q) {
+      var hay = (a.title + ' ' + a.excerpt + ' ' + a.pillarLabel).toLowerCase();
+      if (hay.indexOf(state.q) === -1) return false;
+    }
+    return true;
+  }
+
+  function render() {
+    var groups = document.getElementById('groups');
+    groups.innerHTML = '';
+    var order = [], byPillar = {};
+    DATA.filter(match).forEach(function (a) {
+      if (!byPillar[a.pillar]) { byPillar[a.pillar] = { label: a.pillarLabel, items: [] }; order.push(a.pillar); }
+      byPillar[a.pillar].items.push(a);
+    });
+    var total = 0;
+    order.forEach(function (p) {
+      var g = byPillar[p]; total += g.items.length;
+      groups.insertAdjacentHTML('beforeend',
+        '<div class="topic-group"><div class="topic-group-head"><h2>' + esc(g.label) +
+        '</h2><span class="topic-count">' + g.items.length + ' guide' + (g.items.length === 1 ? '' : 's') + '</span></div>' +
+        '<div class="card-grid">' + g.items.map(card).join('') + '</div></div>');
+    });
+    document.getElementById('empty').hidden = total > 0;
+    document.getElementById('count').textContent = total + ' of ' + DATA.length + ' guides';
+  }
+
+  document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value.trim().toLowerCase(); render(); });
+  document.getElementById('reset').onclick = function () {
+    state = { q: '', type: null, stage: null };
+    document.getElementById('q').value = '';
+    document.querySelectorAll('.res-chip[aria-pressed]').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+    render();
+  };
+  render();
+})();
+</script>
+<script src="../shared/chrome.js" defer></script>
+</body>
+</html>
