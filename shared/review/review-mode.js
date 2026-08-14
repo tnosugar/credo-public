@@ -278,8 +278,12 @@ function anchorPass(){
     if(elm.hasAttribute('data-review-skip'))return;
     const tag=elm.tagName.toLowerCase();
     if(NEVER_ANCHOR.has(tag))return;
-    if(!hasDirectText(elm) && !(ANCHOR_EMPTY.includes(tag) && (elm.textContent||'').trim().length<=1))return;   // anchorEmpty: listed tags anchorable even when (near-)empty
-    if(isInSiteChrome(elm))return;                 // chromeAnchored opt-in not enabled
+    // A self-contained interactive/labeled component (icon-only button like the
+    // chat bubble, a wrapper link/card, a nav toggle) is commentable even without
+    // its own text node.
+    const isComponent = elm.matches('a,button,[role="button"],[data-open-chat],summary,label') || elm.hasAttribute('aria-label');
+    if(!hasDirectText(elm) && !isComponent && !(ANCHOR_EMPTY.includes(tag) && (elm.textContent||'').trim().length<=1))return;
+    // Site chrome (nav / header / footer) is commentable too — the whole page is.
     ANCHOR_COUNTERS[tag]=(ANCHOR_COUNTERS[tag]||0)+1;
     elm.setAttribute('data-comment-id',SLUG+'-'+tag+'-'+ANCHOR_COUNTERS[tag]);
   });
