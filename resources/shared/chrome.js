@@ -105,4 +105,12 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') dropdowns.forEach(function (dd) { dd.setAttribute('data-open', 'false'); dd.querySelector('.services-toggle').setAttribute('aria-expanded', 'false'); });
   });
+
+  // Review / commenting widget — one shared copy at website-main/shared/review/.
+  // CREDO_REVIEW_BASE makes the depth-safe bootstrap load its engine from there;
+  // config then bootstrap are injected in order (async=false).
+  window.CREDO_REVIEW_BASE = ROOT + 'shared/review/';
+  ['review.config.js', 'review-bootstrap.js'].forEach(function (f) {
+    var s = document.createElement('script'); s.src = ROOT + 'shared/review/' + f; s.async = false; document.body.appendChild(s);
+  });
 })();
